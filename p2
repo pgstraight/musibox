@@ -1,0 +1,13 @@
+#!/usr/bin/python
+#import pygame
+import pygame.midi
+
+#pygame.init()
+#pygame.display.set_mode((800, 600))
+pygame.midi.init()
+#pygame.event.set_grab(0)
+
+
+#player = pygame.midi.Output(128)
+
+#print pygame.midi.get_count()
