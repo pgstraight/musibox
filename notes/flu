@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo fluidsynth -a alsa -i /usr/share/sounds/sf2/FluidR3_GM.sf2 -m alsa_seq -r 44100 -s

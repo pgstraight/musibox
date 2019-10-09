@@ -4,13 +4,44 @@ import pygame
 import pygame.midi
 from Drums import Drums
 
+
+
+def print_device_info():
+	pygame.midi.init()
+	_print_device_info()
+	pygame.midi.quit()
+
+def _print_device_info():
+	for i in range( pygame.midi.get_count() ):
+		r = pygame.midi.get_device_info(i)
+		(interf, name, input, output, opened) = r
+		in_out = ""
+		if input:
+			in_out = "(input)"
+		if output:
+			in_out = "(output)"
+
+		print ("%2i: interface :%s:, name :%s:, opened :%s:  %s" %
+			(i, interf, name, opened, in_out))
+
+
+
+
+
+
 pygame.init()
 pygame.display.set_mode((800, 600))
 pygame.midi.init()
 pygame.event.set_grab(0)
 
 
-player = pygame.midi.Output(2)
+#_print_device_info()
+#exit()
+
+
+
+player = pygame.midi.Output(4)
+midin = pygame.midi.Input(3)
 instrument = 0;
 
 
@@ -21,6 +52,7 @@ drums.setBeat('14')
 tempo = 120
 ticker1 = pygame.time.get_ticks()
 
+player.set_instrument(instrument)
 while 1:
 	event = pygame.event.poll()
 	if event.type == pygame.QUIT:
@@ -28,7 +60,16 @@ while 1:
 	if event.type == pygame.KEYDOWN:
 		if event.key == 27:
 			exit()
-
+	if midin.poll():
+		midi_events = midin.read(10)
+		for midi_event in midi_events:
+			p = midi_event[0][0]
+			note = midi_event[0][1]
+			vel = midi_event[0][2]
+			if p == 144:
+				player.note_on(note, vel, 0)
+			if p == 128:
+				player.note_off(note, vel, 0)
 	msdelay = 15000 / tempo
 	ticker2 = pygame.time.get_ticks()
 
@@ -45,6 +86,7 @@ while 1:
 
 
 exit()
+
 
 
 #player.set_instrument(instrument)
